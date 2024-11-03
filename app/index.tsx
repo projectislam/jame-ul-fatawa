@@ -1,5 +1,6 @@
 import UrduText from "@/components/UrduText";
 import { Bab, DarUlIfta, Fasal, Kitab } from "@/types/db";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import {
@@ -15,7 +16,7 @@ import {
 } from "react-native";
 import DarUlIftaCard from "../components/DarUlIftaCard";
 
-const HomeScreen: React.FC = ({ navigation }: any) => {
+const HomeScreen: React.FC = () => {
   const db = useSQLiteContext();
   const [darUlIftaData, setDarUlIftaData] = useState<DarUlIfta[]>([]);
   const [kitabData, setKitabData] = useState<Kitab[]>([]);
@@ -92,6 +93,10 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
     }
   };
 
+  const handleFasalClick = (fasalId: number) => {
+    router.navigate({ pathname: "/results", params: { fasalId } });
+  };
+
   const filteredBabData = expandedKitab
     ? babData.filter((bab) => bab.kitab === expandedKitab)
     : [];
@@ -111,7 +116,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+        <TouchableOpacity onPress={() => router.push("/search")}>
           <TextInput
             placeholder="Search"
             style={styles.searchInput}
@@ -151,9 +156,13 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
                           data={filteredFasalData}
                           keyExtractor={(item) => item.id.toString()}
                           renderItem={({ item: fasal }) => (
-                            <UrduText style={styles.fasalItem}>
-                              {fasal.urdu}
-                            </UrduText>
+                            <TouchableOpacity
+                              onPress={() => handleFasalClick(fasal.id)}
+                            >
+                              <UrduText style={styles.fasalItem}>
+                                {fasal.urdu}
+                              </UrduText>
+                            </TouchableOpacity>
                           )}
                         />
                       )}

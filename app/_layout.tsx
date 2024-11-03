@@ -42,6 +42,7 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name="index" />
           <Stack.Screen name="search" />
+          <Stack.Screen name="results" />
           <Stack.Screen name="+not-found" />
         </Stack>
       </SQLiteProvider>
