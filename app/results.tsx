@@ -1,5 +1,6 @@
 import UrduText from "@/components/UrduText";
 import { useRoute } from "@react-navigation/native";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -61,6 +63,10 @@ export default function ResultsScreen() {
     fetchFatawa();
   }, [fasalId]);
 
+  const handleFatwaClick = (fatwaId: number) => {
+    router.navigate({ pathname: "/detail", params: { fatwaId } });
+  };
+
   // Loading indicator
   if (loading) {
     return (
@@ -78,11 +84,13 @@ export default function ResultsScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.fatwaCard}>
-            <UrduText style={styles.title}>{item.title}</UrduText>
-            <Text style={styles.subText}>
-              Dar-ul-Ifta: {item.darUlIftaName}
-            </Text>
-            <Text style={styles.subText}>Issued: {item.issuedAt}</Text>
+            <TouchableOpacity onPress={() => handleFatwaClick(item.id)}>
+              <UrduText style={styles.title}>{item.title}</UrduText>
+              <Text style={styles.subText}>
+                Dar-ul-Ifta: {item.darUlIftaName}
+              </Text>
+              <Text style={styles.subText}>Issued: {item.issuedAt}</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
