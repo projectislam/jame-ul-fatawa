@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -77,29 +76,13 @@ export default function DetailScreen() {
     return null;
   }
 
-  const arabicFontFile = Platform.select({
-    ios: `file:///assets/fonts/Amiri-Regular.ttf`,
-    android: `file:///android_asset/fonts/Amiri-Regular.ttf`,
-  });
-
-  const urduFontFile = Platform.select({
-    ios: `file:///assets/fonts/NotoNastaliqUrdu-Regular.ttf`,
-    android: `file:///android_asset/fonts/NotoNastaliqUrdu-Regular.ttf`,
-  });
-
   // HTML content for WebView
   const htmlContent = `
       <html>
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <style>
-          @font-face {
-            font-family: 'Urdu'; 
-            src: url('${urduFontFile}') format('truetype')
-          }
-          body { font-family: 'Urdu'; font-size: 18px;  }
-          h1 { font-size: 24px; }
-          p { font-size: 16px; font-family: 'Urdu';  }
+          body { font-size: 18px; direction: rtl;  }
         </style>
       </head>
         <body>
@@ -121,7 +104,6 @@ export default function DetailScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{fatwa.title}</Text>
       <UrduText style={styles.title}>{fatwa.title}</UrduText>
       <Text style={styles.subText}>Dar-ul-Ifta: {fatwa.darUlIftaName}</Text>
       <Text style={styles.subText}>Issued at: {fatwa.issuedAt}</Text>
@@ -132,7 +114,7 @@ export default function DetailScreen() {
       <WebView
         ref={webViewRef}
         originWhitelist={["*"]}
-        source={{ html: htmlContent, baseUrl: "" }}
+        source={{ html: htmlContent }}
         style={{ width: width - 40, height: webViewHeight }}
         scalesPageToFit={false}
         injectedJavaScript={injectedJavaScript}
