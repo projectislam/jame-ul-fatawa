@@ -18,6 +18,8 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
+    Urdu: require("../assets/fonts/NotoNastaliqUrdu-Regular.ttf"),
+    Arabic: require("../assets/fonts/Amiri-Regular.ttf"),
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 

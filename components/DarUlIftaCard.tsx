@@ -1,6 +1,7 @@
 import { DarUlIfta } from "@/types/db";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import UrduText from "./UrduText";
 
 interface DarUlIftaCardProps {
   data: DarUlIfta;
@@ -10,7 +11,7 @@ const DarUlIftaCard: React.FC<DarUlIftaCardProps> = ({ data }) => {
   return (
     <View style={styles.card}>
       {/* <Image source={{ uri: data.logo }} style={styles.logo} /> */}
-      <Text style={styles.name}>{data.name}</Text>
+      <UrduText style={styles.name}>{data.name}</UrduText>
     </View>
   );
 };

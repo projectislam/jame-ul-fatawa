@@ -1,3 +1,4 @@
+import UrduText from "@/components/UrduText";
 import { Bab, DarUlIfta, Fasal, Kitab } from "@/types/db";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
@@ -5,6 +6,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -107,59 +109,63 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-        <TextInput
-          placeholder="Search"
-          style={styles.searchInput}
-          editable={false}
+    <ScrollView>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+          <TextInput
+            placeholder="Search"
+            style={styles.searchInput}
+            editable={false}
+          />
+        </TouchableOpacity>
+
+        <FlatList
+          data={darUlIftaData}
+          numColumns={2}
+          renderItem={({ item }) => <DarUlIftaCard data={item} />}
+          keyExtractor={(item) => item.id.toString()}
         />
-      </TouchableOpacity>
 
-      <FlatList
-        data={darUlIftaData}
-        numColumns={2}
-        renderItem={({ item }) => <DarUlIftaCard data={item} />}
-        keyExtractor={(item) => item.id.toString()}
-      />
+        <Text style={styles.sectionTitle}>Categories</Text>
+        <FlatList
+          data={kitabData}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item: kitab }) => (
+            <View>
+              <TouchableOpacity onPress={() => toggleKitab(kitab.id)}>
+                <UrduText style={styles.kitabItem}>{kitab.urdu}</UrduText>
+              </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>Categories</Text>
-      <FlatList
-        data={kitabData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item: kitab }) => (
-          <View>
-            <TouchableOpacity onPress={() => toggleKitab(kitab.id)}>
-              <Text style={styles.kitabItem}>{kitab.urdu}</Text>
-            </TouchableOpacity>
+              {expandedKitab === kitab.id && (
+                <FlatList
+                  data={filteredBabData}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item: bab }) => (
+                    <View style={styles.babContainer}>
+                      <TouchableOpacity onPress={() => toggleBab(bab.id)}>
+                        <UrduText style={styles.babItem}>{bab.urdu}</UrduText>
+                      </TouchableOpacity>
 
-            {expandedKitab === kitab.id && (
-              <FlatList
-                data={filteredBabData}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item: bab }) => (
-                  <View style={styles.babContainer}>
-                    <TouchableOpacity onPress={() => toggleBab(bab.id)}>
-                      <Text style={styles.babItem}>{bab.urdu}</Text>
-                    </TouchableOpacity>
-
-                    {expandedBab === bab.id && (
-                      <FlatList
-                        data={filteredFasalData}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item: fasal }) => (
-                          <Text style={styles.fasalItem}>{fasal.urdu}</Text>
-                        )}
-                      />
-                    )}
-                  </View>
-                )}
-              />
-            )}
-          </View>
-        )}
-      />
-    </View>
+                      {expandedBab === bab.id && (
+                        <FlatList
+                          data={filteredFasalData}
+                          keyExtractor={(item) => item.id.toString()}
+                          renderItem={({ item: fasal }) => (
+                            <UrduText style={styles.fasalItem}>
+                              {fasal.urdu}
+                            </UrduText>
+                          )}
+                        />
+                      )}
+                    </View>
+                  )}
+                />
+              )}
+            </View>
+          )}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
