@@ -82,7 +82,7 @@ export default function DetailScreen() {
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <style>
-          body { font-size: 18px; direction: rtl;  }
+          body {  direction: rtl;  }
         </style>
       </head>
         <body>
