@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import WebView from "react-native-webview";
+import { ShouldStartLoadRequest } from "react-native-webview/lib/WebViewTypes";
 
 type FatwaDetails = {
   id: number;
@@ -61,6 +62,25 @@ export default function DetailScreen() {
 
     fetchFatwaDetails();
   }, [fatwaId]);
+
+  const handleUrlRequest = (request: ShouldStartLoadRequest) => {
+    const url = decodeURI(request.url);
+
+    console.log(url);
+
+    if (url.includes("banuri.edu.pk/readquestion")) {
+      // Extract the fatawa ID from the URL
+      const fatawaId = url.split("/")?.at(-2)?.split("-")?.at(-1);
+      const darulIfta = "banuri"; // Based on the domain, assign the correct `dar-ul-ifta` ID or name
+
+      // Navigate to the details screen with fatawa ID and dar-ul-ifta
+      console.log(fatawaId);
+      return false; // Prevent WebView from loading this URL
+    }
+
+    // For other URLs, allow WebView to load them as usual
+    return true;
+  };
 
   // Loading indicator
   if (loading) {
@@ -120,6 +140,7 @@ export default function DetailScreen() {
         injectedJavaScript={injectedJavaScript}
         javaScriptEnabled
         onMessage={handleWebViewMessage}
+        onShouldStartLoadWithRequest={handleUrlRequest}
       />
     </ScrollView>
   );
